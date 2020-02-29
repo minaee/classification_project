@@ -10,7 +10,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.tree import DecisionTreeClassifier
 
 
 # download the dataset
@@ -82,7 +82,7 @@ y = df['loan_status'].values
 # ----------------------      Normalize Data
 # Data Standardization give data zero mean and unit variance (technically should be done after train test split )
 
-X= preprocessing.StandardScaler().fit(X).transform(X)
+# X= preprocessing.StandardScaler().fit(X).transform(X)
 # print(X)
 
 
@@ -119,7 +119,7 @@ for n in range(1, Ks):
 
 # print(mean_acc)
 
-#plot model accuracy fot different K
+# # plot model accuracy fot different K
 # plt.plot(range(1,Ks),mean_acc,'g')
 # plt.fill_between(range(1,Ks),mean_acc - 1 * std_acc,mean_acc + 1 * std_acc, alpha=0.10)
 # plt.legend(('Accuracy ', '+/- 3xstd'))
@@ -128,3 +128,27 @@ for n in range(1, Ks):
 # plt.tight_layout()
 # plt.show()
 # print( "The best accuracy was with", mean_acc.max(), "with k=", mean_acc.argmax()+1)
+
+#  -----------    decision tree    -----------
+
+
+X_train_dt, X_test_dt, y_train_dt, y_test_dt = train_test_split(X, y, test_size=0.3, random_state=7)
+# print(X_train_dt.shape)
+# print(y_train_dt.shape)
+# print(X_test_dt.shape)
+# print(y_test_dt.shape)
+
+#  an instance of the DecisionTreeClassifier called load_tree.
+load_tree = DecisionTreeClassifier(criterion="entropy", max_depth = 2)
+# print(load_tree) # it shows the default parameters
+
+# fit the data with the training feature matrix and training response vector
+load_tree.fit(X_train_dt,y_train_dt)
+
+predTree = load_tree.predict(X_test_dt)
+# print (predTree [0:5])
+# print (y_test_dt [0:5])
+
+print("DecisionTrees's Accuracy: ", metrics.accuracy_score(y_test_dt, predTree))
+
+
